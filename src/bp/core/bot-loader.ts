@@ -15,8 +15,8 @@ import { TYPES } from './types'
 
 @injectable()
 export class BotLoader {
-  public mountBot: Function
-  public unmountBot: Function
+  public mountBot: ((botId) => Promise<void>) | Function = this._mountBot
+  public unmountBot: ((botId) => Promise<void>) | Function = this._unmountBot
 
   constructor(
     @inject(TYPES.Logger)
@@ -29,10 +29,7 @@ export class BotLoader {
     @inject(TYPES.ModuleLoader) private moduleLoader: ModuleLoader,
     @inject(TYPES.HookService) private hookService: HookService,
     @inject(TYPES.JobService) private jobService: JobService
-  ) {
-    this.mountBot = this._mountBot
-    this.unmountBot = this._unmountBot
-  }
+  ) {}
 
   @postConstruct()
   async init() {
